@@ -9,4 +9,6 @@
 
     <string name="up">Up</string>
 
+    <string name="published_date_with_author">%1$s by %2$s</string>
+
 </resources>
