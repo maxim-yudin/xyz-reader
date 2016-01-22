@@ -59,24 +59,7 @@ public class ArticleDetailActivity extends AppCompatActivity
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
         mPager.setPageMarginDrawable(new ColorDrawable(0x22000000));
 
-        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-                mUpButton.animate()
-                        .alpha((state == ViewPager.SCROLL_STATE_IDLE) ? 1f : 0f)
-                        .setDuration(300);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (mCursor != null) {
-                    mCursor.moveToPosition(position);
-                    mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
-                }
-                updateUpButtonPosition();
-            }
-        });
+        mPager.addOnPageChangeListener(mPagerOnPageChangeListener);
 
         mUpButtonContainer = findViewById(R.id.up_container);
 
@@ -109,6 +92,25 @@ public class ArticleDetailActivity extends AppCompatActivity
             }
         }
     }
+
+    private final ViewPager.OnPageChangeListener mPagerOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            super.onPageScrollStateChanged(state);
+            mUpButton.animate()
+                    .alpha((state == ViewPager.SCROLL_STATE_IDLE) ? 1f : 0f)
+                    .setDuration(300);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (mCursor != null) {
+                mCursor.moveToPosition(position);
+                mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
+            }
+            updateUpButtonPosition();
+        }
+    };
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -179,5 +181,11 @@ public class ArticleDetailActivity extends AppCompatActivity
         public int getCount() {
             return (mCursor != null) ? mCursor.getCount() : 0;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPager.removeOnPageChangeListener(mPagerOnPageChangeListener);
     }
 }
