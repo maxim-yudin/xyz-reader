@@ -15,7 +15,10 @@
      limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+    <color name="white">#fff</color>
+    <color name="white_semitransparent">#8fff</color>
+
     <color name="photo_placeholder">#ccc</color>
 
     <color name="theme_primary">#8bc34a</color>
